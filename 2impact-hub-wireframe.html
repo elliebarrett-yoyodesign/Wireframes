@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Impact Hub Landing Page Wireframe / Fight for Sight</title>
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --paper: #fafaf7;
+    --wire: #6e6e69;
+    --wire-light: #d4d4cf;
+    --wire-bg: #efeeea;
+    --accent: #c8e000;
+    --annotation-bg: #ffffff;
+    --annotation-border: #1a1a1a;
+    --zone-number-bg: #1a1a1a;
+    --zone-number-fg: #c8e000;
+    --focus: #0066ff;
+    --new-component: #ff6b35;
+  }
+
+  * { box-sizing: border-box; }
+
+  /* Reset button defaults so existing visual styles still apply */
+  button {
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    text-align: inherit;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.5;
+  }
+
+  /* Skip link for keyboard users */
+  .skip-link {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 8px 16px;
+    text-decoration: none;
+    z-index: 100;
+  }
+  .skip-link:focus {
+    top: 0;
+  }
+
+  /* Focus styles */
+  :focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+  }
+  /* Main is a skip-link target only, no visible outline needed on it */
+  main:focus {
+    outline: none;
+  }
+
+  /* Page header */
+  .page-header {
+    padding: 24px 32px;
+    border-bottom: 2px solid var(--ink);
+    background: var(--paper);
+  }
+  .page-header h1 {
+    margin: 0 0 4px 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+  .page-header p {
+    margin: 0;
+    color: var(--wire);
+    font-size: 0.875rem;
+  }
+
+  /* Two-column layout */
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 0;
+    min-height: calc(100vh - 90px);
+  }
+
+  /* Wireframe column */
+  .wireframe {
+    padding: 32px;
+    background:
+      repeating-linear-gradient(0deg, transparent 0, transparent 39px, var(--wire-light) 39px, var(--wire-light) 40px),
+      repeating-linear-gradient(90deg, transparent 0, transparent 39px, var(--wire-light) 39px, var(--wire-light) 40px),
+      var(--paper);
+  }
+
+  .wireframe-inner {
+    max-width: 60vw;
+    margin: 0 auto;
+  }
+
+  .browser-chrome {
+    background: var(--annotation-bg);
+    border: 2px solid var(--ink);
+    border-radius: 8px 8px 0 0;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-bottom: none;
+  }
+  .browser-chrome::before {
+    content: '';
+    display: inline-block;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--wire-light);
+    box-shadow: 16px 0 0 var(--wire-light), 32px 0 0 var(--wire-light);
+  }
+  .browser-chrome .url-bar {
+    margin-left: 60px;
+    flex: 1;
+    background: var(--wire-bg);
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    color: var(--wire);
+    font-family: 'Courier New', monospace;
+  }
+
+  .page-canvas {
+    background: var(--annotation-bg);
+    border: 2px solid var(--ink);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* Site header strip (nav placeholder) */
+  .site-nav {
+    background: var(--wire-bg);
+    border: 1px dashed var(--wire);
+    padding: 12px 16px;
+    font-size: 0.75rem;
+    color: var(--wire);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* Zone styling */
+  .zone {
+    position: relative;
+    border: 2px solid var(--ink);
+    background: var(--annotation-bg);
+    padding: 20px;
+    border-radius: 4px;
+    transition: background 0.15s;
+  }
+  .zone:focus-within,
+  .zone:hover {
+    background: #fffef0;
+  }
+  .zone:target {
+    background: #fff8c4;
+    animation: pulse 1.2s ease-out;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(200, 224, 0, 0.6); }
+    100% { box-shadow: 0 0 0 12px rgba(200, 224, 0, 0); }
+  }
+
+  .zone-number {
+    display: none;
+  }
+
+  .zone-label {
+    font-size: 1rem;
+    color: var(--ink);
+    margin: 0 0 16px 0;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.005em;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .zone-tag {
+    display: inline-block;
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 3px 8px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  .placeholder {
+    background: var(--wire-bg);
+    border: 1px dashed var(--wire);
+    padding: 16px;
+    color: var(--wire);
+    font-size: 0.8rem;
+    border-radius: 2px;
+  }
+
+  /* Zone 1 / Hero */
+  .zone-hero {
+    min-height: 220px;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 16px;
+    align-items: stretch;
+  }
+  .hero-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+  }
+  .hero-statement {
+    font-size: 1.05rem;
+    font-weight: 500;
+    line-height: 1.4;
+    color: var(--ink);
+    margin: 0;
+  }
+  .hero-links {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .hero-link-pill {
+    background: var(--wire-bg);
+    border: 1px dashed var(--wire);
+    padding: 4px 10px;
+    font-size: 0.7rem;
+    color: var(--wire);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-radius: 12px;
+  }
+  .hero-link-pill.subtle {
+    opacity: 0.7;
+  }
+  .hero-headline {
+    height: 24px;
+    background: var(--wire);
+    width: 90%;
+    border-radius: 2px;
+  }
+  .hero-sub {
+    height: 12px;
+    background: var(--wire-light);
+    border-radius: 2px;
+  }
+  .hero-sub.short { width: 60%; }
+  .hero-stats {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    gap: 8px;
+  }
+  .stat-block {
+    background: var(--wire-bg);
+    border: 1px dashed var(--wire);
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+  }
+  .stat-question {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--ink);
+  }
+  .stat-question-sub {
+    font-size: 0.75rem;
+    color: var(--wire);
+  }
+  .stat-number { height: 20px; background: var(--ink); width: 50%; border-radius: 2px; }
+  .stat-label { height: 8px; background: var(--wire-light); width: 80%; border-radius: 2px; }
+
+  /* Zone 2 / Audience selector cards */
+  .zone-selector {
+    background: #fff8e8;
+    border-color: var(--new-component);
+  }
+  .new-tag {
+    display: inline-block;
+    background: var(--new-component);
+    color: white;
+    font-size: 0.65rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+  .selector-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .selector-card {
+    background: var(--annotation-bg);
+    border: 1.5px solid var(--ink);
+    padding: 14px;
+    min-height: 90px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-radius: 4px;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .selector-card:hover {
+    background: #fffef0;
+  }
+  .selector-card:active {
+    transform: scale(0.98);
+  }
+  .selector-card-icon {
+    width: 24px; height: 24px;
+    background: var(--wire-light);
+    border-radius: 50%;
+  }
+  .selector-card-text {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+  .selector-card-route {
+    font-size: 0.65rem;
+    color: var(--wire);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: auto;
+  }
+  .selector-card-title {
+    height: 10px;
+    background: var(--ink);
+    width: 75%;
+    border-radius: 2px;
+  }
+  .selector-card-desc {
+    height: 6px;
+    background: var(--wire-light);
+    width: 90%;
+    border-radius: 2px;
+  }
+
+  /* Zone 3 & 4 / Science / Social change */
+  .zone-content {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 16px;
+    align-items: start;
+  }
+  .content-image {
+    aspect-ratio: 4/3;
+    background: var(--wire-bg);
+    border: 1px dashed var(--wire);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--wire);
+    font-size: 0.7rem;
+  }
+  .content-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .content-headline { height: 16px; background: var(--ink); width: 70%; border-radius: 2px; }
+  .content-line { height: 8px; background: var(--wire-light); border-radius: 2px; }
+  .content-heading {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0;
+  }
+  .content-sub {
+    font-size: 0.8rem;
+    color: var(--wire);
+    margin: 4px 0 0 0;
+  }
+  .content-list {
+    margin: 0;
+    padding-left: 18px;
+    font-size: 0.85rem;
+    color: var(--ink);
+    line-height: 1.6;
+  }
+  .content-list li {
+    margin-bottom: 2px;
+  }
+  .content-cta {
+    margin-top: 8px;
+    display: inline-block;
+    width: auto;
+    padding: 8px 16px;
+    height: auto;
+    background: var(--annotation-bg);
+    border: 1.5px solid var(--ink);
+    border-radius: 2px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    align-self: flex-start;
+    transition: background 0.15s;
+  }
+  .content-cta:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  /* Zone 5 / Donate widget */
+  .zone-donate {
+    background: #f0f8e8;
+    border-color: var(--new-component);
+  }
+  .donate-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 16px;
+    align-items: center;
+  }
+  .donate-amounts {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .amount-chip {
+    background: var(--annotation-bg);
+    border: 1.5px solid var(--ink);
+    padding: 10px 16px;
+    font-size: 0.8rem;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .amount-chip:hover {
+    background: #fffef0;
+  }
+  .amount-chip.selected {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .amount-chip.selected:hover {
+    background: #333;
+  }
+  .impact-statement {
+    height: 10px;
+    background: var(--wire);
+    width: 85%;
+    margin-top: 12px;
+    border-radius: 2px;
+  }
+  .impact-statement.short { width: 60%; }
+  .donate-impact-line {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin: 12px 0 6px 0;
+    line-height: 1.4;
+  }
+  .donate-impact-sub {
+    font-size: 0.75rem;
+    color: var(--wire);
+    margin: 0;
+    font-style: italic;
+  }
+  .donate-button {
+    background: var(--ink);
+    color: var(--paper);
+    text-align: center;
+    padding: 14px 24px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    border-radius: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.15s;
+    align-self: center;
+  }
+  .donate-button:hover {
+    background: #333;
+  }
+
+  /* Footer placeholder */
+  .site-footer {
+    background: var(--wire-bg);
+    border: 1px dashed var(--wire);
+    padding: 24px;
+    text-align: center;
+    color: var(--wire);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* Annotations column */
+  .annotations {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 32px 28px;
+    overflow-y: auto;
+    position: sticky;
+    top: 0;
+    max-height: 100vh;
+  }
+  .annotations h2 {
+    margin: 0 0 8px 0;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 700;
+  }
+  .annotations > p {
+    margin: 0 0 24px 0;
+    font-size: 0.8rem;
+    color: #999;
+    line-height: 1.5;
+  }
+
+  .annotation-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .annotation {
+    border-left: 3px solid var(--accent);
+    padding: 4px 0 4px 16px;
+  }
+  .annotation a {
+    color: var(--paper);
+    text-decoration: none;
+    display: block;
+  }
+  .annotation a:hover .annotation-title-text,
+  .annotation a:focus-visible .annotation-title-text {
+    color: var(--accent);
+  }
+  .annotation-number {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--ink);
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 22px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-right: 8px;
+  }
+  .annotation-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    margin: 0;
+  }
+  .annotation-title-text {
+    font-weight: 700;
+  }
+  .annotation-body {
+    font-size: 0.8rem;
+    color: #d4d4cf;
+    line-height: 1.55;
+    margin: 8px 0 0 0;
+  }
+  .annotation-goals {
+    font-size: 0.72rem;
+    color: #b0b0a8;
+    line-height: 1.55;
+    margin: 10px 0 0 0;
+    padding: 8px 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border-left: 2px solid var(--accent);
+    border-radius: 0 4px 4px 0;
+  }
+  .goals-label {
+    display: block;
+    color: var(--accent);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.65rem;
+    margin-bottom: 4px;
+  }
+  .annotation-meta {
+    display: inline-block;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-top: 8px;
+    font-weight: 600;
+  }
+  .meta-new {
+    background: var(--new-component);
+    color: white;
+  }
+  .meta-repurposed {
+    background: #6b8eff;
+    color: white;
+  }
+  .meta-existing {
+    background: #444;
+    color: var(--accent);
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .layout {
+      grid-template-columns: 1fr;
+    }
+    .wireframe-inner {
+      max-width: 100%;
+    }
+    .annotations {
+      position: static;
+      max-height: none;
+    }
+    .selector-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .zone-content,
+    .zone-hero,
+    .donate-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Screen reader only utility */
+  .sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<a href="#main-wireframe" class="skip-link">Skip to wireframe</a>
+
+<header class="page-header">
+  <h1>Impact Hub Landing Page / Wireframe</h1>
+  <p>Fight for Sight · Question-led, audience-routed landing page · Five content zones</p>
+</header>
+
+<div class="layout">
+
+  <main id="main-wireframe" class="wireframe" aria-label="Wireframe of the Impact Hub landing page" tabindex="-1">
+   <p class="sr-only">This page shows a wireframe of the Impact Hub landing page on the left, and a column of zone annotations on the right. The wireframe contains five zones, each marked with a heading. Detailed notes for each zone are in the annotations region after the wireframe.</p>
+   <div class="wireframe-inner">
+
+    <div class="browser-chrome" aria-hidden="true">
+      <span class="url-bar">fightforsight.org.uk/our-impact</span>
+    </div>
+
+    <div class="page-canvas">
+
+      <div class="site-nav" aria-hidden="true">
+        <span>Logo</span>
+        <span>Main navigation</span>
+        <span>Donate</span>
+      </div>
+
+      <!-- ZONE 1 -->
+      <section id="zone-1" class="zone zone-hero" aria-labelledby="zone-1-title">
+        <span class="zone-number" aria-hidden="true">1</span>
+        <div class="hero-text">
+          <h2 class="zone-label" id="zone-1-title"><span class="zone-tag">Zone 1</span><span>Hero (two root questions + urgency)</span></h2>
+          <p class="hero-statement">"2 million people in the UK are living with sight loss. We fund the science that stops it and the social change that transforms life with it."</p>
+          <div class="hero-links" aria-hidden="true">
+            <span class="hero-link-pill">Stats page</span>
+            <span class="hero-link-pill subtle">Donate widget (visible, not dominant)</span>
+          </div>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-block">
+            <span class="stat-question">Save Sight</span>
+            <span class="stat-question-sub">The science we fund</span>
+          </div>
+          <div class="stat-block">
+            <span class="stat-question">Change Lives</span>
+            <span class="stat-question-sub">The social change we fund</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ZONE 2 -->
+      <section id="zone-2" class="zone zone-selector" aria-labelledby="zone-2-title">
+        <span class="zone-number" aria-hidden="true">2</span>
+        <h2 class="zone-label" id="zone-2-title">
+          <span class="zone-tag">Zone 2</span>
+          <span>Audience selector "What brings you here?"</span>
+          <span class="new-tag" aria-label="New component">New</span>
+        </h2>
+        <div class="selector-grid" role="group" aria-label="Select your audience to begin a tailored journey">
+          <button type="button" class="selector-card">
+            <div class="selector-card-icon" aria-hidden="true"></div>
+            <span class="selector-card-text">I want to support the science</span>
+            <span class="selector-card-route"><span aria-hidden="true">→ </span><span class="sr-only">Routes to </span>Save Sight</span>
+          </button>
+          <button type="button" class="selector-card">
+            <div class="selector-card-icon" aria-hidden="true"></div>
+            <span class="selector-card-text">I want to get involved</span>
+            <span class="selector-card-route"><span aria-hidden="true">→ </span><span class="sr-only">Routes to </span>Fundraising / Volunteering</span>
+          </button>
+          <button type="button" class="selector-card">
+            <div class="selector-card-icon" aria-hidden="true"></div>
+            <span class="selector-card-text">I represent a trust or company</span>
+            <span class="selector-card-route"><span aria-hidden="true">→ </span><span class="sr-only">Routes to </span>Partnerships</span>
+          </button>
+          <button type="button" class="selector-card">
+            <div class="selector-card-icon" aria-hidden="true"></div>
+            <span class="selector-card-text">I'm a researcher</span>
+            <span class="selector-card-route"><span aria-hidden="true">→ </span><span class="sr-only">Routes to </span>Grant applications</span>
+          </button>
+          <button type="button" class="selector-card">
+            <div class="selector-card-icon" aria-hidden="true"></div>
+            <span class="selector-card-text">I want to understand the impact of my gift</span>
+            <span class="selector-card-route"><span aria-hidden="true">→ </span><span class="sr-only">Routes to </span>Donor stories / Where money goes</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ZONE 3 -->
+      <section id="zone-3" class="zone zone-content" aria-labelledby="zone-3-title">
+        <span class="zone-number" aria-hidden="true">3</span>
+        <div class="content-image" aria-hidden="true">[ Image: Save Sight / scientific research ]</div>
+        <div class="content-body">
+          <h2 class="zone-label" id="zone-3-title"><span class="zone-tag">Zone 3</span><span>Save Sight (the science we fund)</span></h2>
+          <p class="content-heading">Browse research by eye condition</p>
+          <ul class="content-list" aria-label="Save Sight content links">
+            <li>Funded research projects</li>
+            <li>A to Z of eye conditions</li>
+            <li>Prof Michaelides interview (social proof)</li>
+          </ul>
+          <button type="button" class="content-cta">Explore the science</button>
+        </div>
+      </section>
+
+      <!-- ZONE 4 -->
+      <section id="zone-4" class="zone zone-content" aria-labelledby="zone-4-title" style="grid-template-columns: 1.4fr 1fr;">
+        <span class="zone-number" aria-hidden="true">4</span>
+        <div class="content-body">
+          <h2 class="zone-label" id="zone-4-title"><span class="zone-tag">Zone 4</span><span>Change Lives (the social change we fund)</span></h2>
+          <p class="content-heading">Anchored by three insight reports</p>
+          <ul class="content-list" aria-label="Change Lives insight report anchors">
+            <li>Outside</li>
+            <li>The Unseen</li>
+            <li>See My Skills</li>
+          </ul>
+          <p class="content-sub">Supporting lived experience stories</p>
+          <button type="button" class="content-cta">Explore social change</button>
+        </div>
+        <div class="content-image" aria-hidden="true">[ Image: Change Lives / lived experience ]</div>
+      </section>
+
+      <!-- ZONE 5 -->
+      <section id="zone-5" class="zone zone-donate" aria-labelledby="zone-5-title">
+        <span class="zone-number" aria-hidden="true">5</span>
+        <h2 class="zone-label" id="zone-5-title">
+          <span class="zone-tag">Zone 5</span>
+          <span>Contextual donate widget</span>
+          <span class="new-tag" aria-label="Repurposed: reuses existing content in a new way">Repurposed</span>
+        </h2>
+        <div class="donate-grid">
+          <div>
+            <div class="donate-amounts" role="group" aria-label="Donation amount">
+              <button type="button" class="amount-chip" aria-pressed="false">£10</button>
+              <button type="button" class="amount-chip selected" aria-pressed="true">£25</button>
+              <button type="button" class="amount-chip" aria-pressed="false">£50</button>
+              <button type="button" class="amount-chip" aria-pressed="false">£100</button>
+              <button type="button" class="amount-chip" aria-pressed="false">Other</button>
+            </div>
+            <p class="donate-impact-line">"£25 could fund an hour of lab time researching a treatment for retinal disease."</p>
+            <p class="donate-impact-sub">Impact statement adapts to selected amount and to the content the visitor has just scrolled past.</p>
+          </div>
+          <button type="button" class="donate-button">Donate</button>
+        </div>
+      </section>
+
+      <div class="site-footer" aria-hidden="true">Site footer</div>
+
+    </div>
+   </div>
+  </main>
+
+  <aside class="annotations" aria-labelledby="annotations-heading">
+    <h2 id="annotations-heading">Zone annotations</h2>
+    <p>The Impact Hub is being restructured as a question-led, audience-routed experience rather than a single scrolling content page. Every zone moves someone toward a decision or conversion point. Select a zone name to jump to it.</p>
+
+    <ol class="annotation-list">
+
+      <li class="annotation" id="annotation-1">
+        <h3 class="annotation-title">
+          <a href="#zone-1">
+            <span class="annotation-number" aria-hidden="true">1</span>
+            <span class="annotation-title-text">Hero (high-level what we do + urgency)</span>
+          </a>
+        </h3>
+        <p class="annotation-body">
+          Opens with the two root questions as a visual device: Save Sight and Change Lives. Headline lands the scale of the problem ("2 million people in the UK are living with sight loss. We fund the science that stops it and the social change that transforms life with it."). Stats page link and donate widget are visible but not dominant.
+        </p>
+        <p class="annotation-goals">
+          <span class="goals-label">Addresses:</span>
+          Structural goal: improve onward journeys per audience. Content goal: leverage urgent need to donate. Content goal: showcase what's unique about the F4S brand.
+        </p>
+        <span class="annotation-meta meta-existing">Existing content, restructured</span>
+      </li>
+
+      <li class="annotation" id="annotation-2">
+        <h3 class="annotation-title">
+          <a href="#zone-2">
+            <span class="annotation-number" aria-hidden="true">2</span>
+            <span class="annotation-title-text">Audience selector "What brings you here?"</span>
+          </a>
+        </h3>
+        <p class="annotation-body">
+          Clearly labelled route-in cards, not hidden in nav: "I want to support the science", "I want to get involved", "I represent a trust or company", "I'm a researcher", "I want to understand the impact of my gift". Each routes to a tailored sub-page or anchor section. This is the routing engine of the page.
+        </p>
+        <p class="annotation-goals">
+          <span class="goals-label">Addresses:</span>
+          Structural goal: improve onward journeys for each audience. Structural goal: ensure each audience sees relevant impact information. Content goal: show where money goes regardless of gift size.
+        </p>
+        <span class="annotation-meta meta-new">New component</span>
+      </li>
+
+      <li class="annotation" id="annotation-3">
+        <h3 class="annotation-title">
+          <a href="#zone-3">
+            <span class="annotation-number" aria-hidden="true">3</span>
+            <span class="annotation-title-text">Save Sight (the science we fund)</span>
+          </a>
+        </h3>
+        <p class="annotation-body">
+          Brief, searchable by condition. Links to funded research pages, A to Z conditions, and the Prof Michaelides interview as social proof. Condition-specific pages are high-value SEO/AEO/GEO targets, so this zone earns its place both editorially and for search.
+        </p>
+        <p class="annotation-goals">
+          <span class="goals-label">Addresses:</span>
+          Structural goal: optimise for SEO, AEO, GEO. Content goal: evidence of scientific research.
+        </p>
+        <span class="annotation-meta meta-existing">Existing content</span>
+      </li>
+
+      <li class="annotation" id="annotation-4">
+        <h3 class="annotation-title">
+          <a href="#zone-4">
+            <span class="annotation-number" aria-hidden="true">4</span>
+            <span class="annotation-title-text">Change Lives (the social change we fund)</span>
+          </a>
+        </h3>
+        <p class="annotation-body">
+          Pulls from the three insight reports (Outside, The Unseen, See My Skills) as anchors. Uses lived experience stories to ground the social programmes side of F4S's work. Important for donors who connect with people rather than lab science.
+        </p>
+        <p class="annotation-goals">
+          <span class="goals-label">Addresses:</span>
+          Content goal: evidence of social change. Content goal: stories of impact. Structural goal: improve SEO for thematic / social topics.
+        </p>
+        <span class="annotation-meta meta-existing">Existing content</span>
+      </li>
+
+      <li class="annotation" id="annotation-5">
+        <h3 class="annotation-title">
+          <a href="#zone-5">
+            <span class="annotation-number" aria-hidden="true">5</span>
+            <span class="annotation-title-text">Contextual donate widget</span>
+          </a>
+        </h3>
+        <p class="annotation-body">
+          Not generic. The amount-specific impact descriptions already exist on the site, but they're surfaced here in the context of what's been shown above, rather than as a standalone widget. Catches anyone ready to convert without going deeper into a cluster journey.
+        </p>
+        <p class="annotation-goals">
+          <span class="goals-label">Addresses:</span>
+          Content goal: show where money goes regardless of amount. Content goal: leverage urgent need to donate.
+        </p>
+        <span class="annotation-meta meta-repurposed">Repurposed component</span>
+      </li>
+
+    </ol>
+  </aside>
+
+</div>
+
+</body>
+</html>
